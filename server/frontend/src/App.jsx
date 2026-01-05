@@ -19,7 +19,7 @@ export default function App() {
     setResponse("");
 
     try {
-      const res = await fetch(`${API_BASE}/api/generate?stream=true`, {
+      const res = await fetch(`${API_BASE}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
@@ -30,22 +30,8 @@ export default function App() {
         throw new Error(message || "Request failed");
       }
 
-      if (!res.body) {
-        throw new Error("Streaming response not supported in this browser.");
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: !done });
-          setResponse((prev) => prev + chunk);
-        }
-      }
+      const data = await res.json();
+      setResponse(data.response || "No response returned.");
     } catch (err) {
       setError(err.message);
     } finally {
