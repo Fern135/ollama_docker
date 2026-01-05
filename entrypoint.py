@@ -27,7 +27,7 @@ def get_lan_ip() -> str:
 
 
 def wait_for_server(url: str, timeout: int = 1) -> None:
-    """Block until http://localhost:11434/ responds."""
+    """Block until Ollama responds (use /api/version for 200)."""
     while True:
         try:
             with urllib.request.urlopen(url, timeout=timeout):
@@ -48,7 +48,7 @@ def main() -> None:
 
     try:
         # 2) Wait for API to be ready
-        wait_for_server(f"http://localhost:{PORT}/")
+        wait_for_server(f"http://localhost:{PORT}/api/version")
 
         # 3) Pull model on first run
         if not model_already_cached(MODEL):
