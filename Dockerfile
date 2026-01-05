@@ -1,11 +1,10 @@
 # ----------  Dockerfile  ----------
-# CPU-only base image
-FROM ubuntu:22.04
+# Ollama base image (CPU)
+FROM ollama/ollama:latest
 
 # Core packages + Python
 RUN apt-get update && \
-    apt-get install -y curl gnupg ca-certificates python3 python3-pip && \
-    curl -fsSL https://ollama.ai/install.sh | sh && \
+    apt-get install -y --no-install-recommends python3 python3-pip ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy helper scripts
